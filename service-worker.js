@@ -1,4 +1,4 @@
-const CACHE_NAME = 'hermoso-dashboard-v20260828-pwa-2';
+const CACHE_NAME = 'hermoso-dashboard-v20260828-manual-history-3';
 const STATIC_ASSETS = [
   './',
   './index.html',

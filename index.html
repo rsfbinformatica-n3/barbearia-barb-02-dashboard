@@ -10,10 +10,10 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="Hermoso" />
-  <link rel="manifest" href="manifest.webmanifest" />
-  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png" />
-  <link rel="apple-touch-icon" sizes="180x180" href="icons/icon-180.png" />
-  <link rel="stylesheet" href="style.css" />
+  <link rel="manifest" href="manifest.webmanifest?v=20260828-manual-history-2" />
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png?v=20260828-manual-history-2" />
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/icon-180.png?v=20260828-manual-history-2" />
+  <link rel="stylesheet" href="style.css?v=20260828-manual-history-2" />
 </head>
 <body>
 
@@ -132,17 +132,17 @@
     </div>
   </div>
 
-  <script src="config.js"></script>
-  <script src="auth.js"></script>
-  <script src="api.js"></script>
-  <script src="ui.js"></script>
-  <script src="overview.js"></script>
-  <script src="kanban.js"></script>
-  <script src="agenda.js"></script>
-  <script src="atendimento.js"></script>
+  <script src="config.js?v=20260828-manual-history-2"></script>
+  <script src="auth.js?v=20260828-manual-history-2"></script>
+  <script src="api.js?v=20260828-manual-history-2"></script>
+  <script src="ui.js?v=20260828-manual-history-2"></script>
+  <script src="overview.js?v=20260828-manual-history-2"></script>
+  <script src="kanban.js?v=20260828-manual-history-2"></script>
+  <script src="agenda.js?v=20260828-manual-history-2"></script>
+  <script src="atendimento.js?v=20260828-manual-history-2"></script>
   <!-- Chart.js local: evita falha em celular/adblock/CSP/CDN e mantém a versão travada. -->
-  <script src="vendor/chart.umd.min.js"></script>
-  <script src="relatorios.js"></script>
+  <script src="vendor/chart.umd.min.js?v=20260828-manual-history-2"></script>
+  <script src="relatorios.js?v=20260828-manual-history-2"></script>
   <script>
     // Bootstrap da página: liga login/logout, navegação da sidebar, menu mobile
     // e preenche todos os ícones (elementos com [data-icone]).
@@ -282,7 +282,7 @@
     // PWA: registro do service worker + botão de instalação quando o navegador oferecer.
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./service-worker.js').then((registration) => {
+        navigator.serviceWorker.register('./service-worker.js?v=20260828-manual-history-2').then((registration) => {
           // Garante que o app instalado receba correções rapidamente, sem ficar preso
           // em uma versão antiga do atendimento/API por cache do PWA.
           registration.update().catch(() => {});

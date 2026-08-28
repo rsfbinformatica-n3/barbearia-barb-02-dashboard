@@ -15,6 +15,7 @@ const Atendimento = {
   _termoBusca: '',
   _clienteSelecionadoId: null,
   _carregouUmaVez: false,
+  _mensagensManuaisRecentes: new Map(),
 
   init({ listaEl, chatEl, buscaEl, layoutEl }) {
     this._listaEl = listaEl;
@@ -188,18 +189,54 @@ const Atendimento = {
     const mensagensEl = this._chatEl.querySelector('.chat-mensagens');
     if (!mensagensEl) return;
 
+    const mensagensComPendentes = this._mesclarMensagensManuaisRecentes(cliente, mensagens);
+
     const pertoDoFinal = mensagensEl.scrollHeight - mensagensEl.scrollTop - mensagensEl.clientHeight < 80;
 
     mensagensEl.innerHTML = '';
-    if (mensagens.length === 0) {
+    if (mensagensComPendentes.length === 0) {
       mensagensEl.innerHTML = '<div class="chat-mensagens-vazio">Nenhuma mensagem ainda.</div>';
     } else {
-      mensagens.forEach((m) => mensagensEl.appendChild(this._criarBolha(m)));
+      mensagensComPendentes.forEach((m) => mensagensEl.appendChild(this._criarBolha(m)));
     }
 
     if (pertoDoFinal) mensagensEl.scrollTop = mensagensEl.scrollHeight;
 
     this._atualizarCabecalhoChat();
+  },
+
+  _registrarMensagemManualRecente(clienteId, mensagem) {
+    const agora = new Date().toISOString();
+    const lista = this._mensagensManuaisRecentes.get(clienteId) || [];
+    lista.push({ role: 'humano', mensagem, created_at: agora, _local: true });
+    const limite = Date.now() - 5 * 60 * 1000;
+    this._mensagensManuaisRecentes.set(
+      clienteId,
+      lista.filter((m) => new Date(m.created_at).getTime() >= limite).slice(-10)
+    );
+    return agora;
+  },
+
+  _mesclarMensagensManuaisRecentes(cliente, mensagens) {
+    const pendentes = this._mensagensManuaisRecentes.get(cliente.cliente_id) || [];
+    if (!pendentes.length) return mensagens;
+
+    const limite = Date.now() - 5 * 60 * 1000;
+    const mensagensNormalizadas = Array.isArray(mensagens) ? [...mensagens] : [];
+
+    const aindaPendentes = pendentes.filter((p) => {
+      const ts = new Date(p.created_at).getTime();
+      if (Number.isFinite(ts) && ts < limite) return false;
+      return !mensagensNormalizadas.some((m) => {
+        return m.role === 'humano'
+          && String(m.mensagem || '').trim() === String(p.mensagem || '').trim()
+          && Math.abs(new Date(m.created_at).getTime() - ts) < 10 * 60 * 1000;
+      });
+    });
+
+    this._mensagensManuaisRecentes.set(cliente.cliente_id, aindaPendentes);
+    return mensagensNormalizadas.concat(aindaPendentes)
+      .sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
   },
 
   _clienteAtual() {
@@ -348,11 +385,12 @@ const Atendimento = {
 
         // Feedback visual imediato: evita a sensação de que a mensagem "sumiu" enquanto
         // o polling/GET mensagens ainda não voltou do servidor.
+        const createdAtLocal = this._registrarMensagemManualRecente(cliente.cliente_id, texto);
         const mensagensEl = this._chatEl.querySelector('.chat-mensagens');
         if (mensagensEl) {
           const vazio = mensagensEl.querySelector('.chat-mensagens-vazio');
           if (vazio) vazio.remove();
-          mensagensEl.appendChild(this._criarBolha({ role: 'humano', mensagem: texto, created_at: new Date().toISOString() }));
+          mensagensEl.appendChild(this._criarBolha({ role: 'humano', mensagem: texto, created_at: createdAtLocal, _local: true }));
           mensagensEl.scrollTop = mensagensEl.scrollHeight;
         }
 
