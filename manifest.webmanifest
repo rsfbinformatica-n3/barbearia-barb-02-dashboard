@@ -1,0 +1,38 @@
+{
+  "name": "Hermoso Bigote Dashboard",
+  "short_name": "Hermoso",
+  "description": "Dashboard da Barbearia Hermoso Bigote para agenda, atendimento e relatórios.",
+  "id": "/barbearia-barb-02-dashboard/",
+  "start_url": "/barbearia-barb-02-dashboard/",
+  "scope": "/barbearia-barb-02-dashboard/",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "portrait-primary",
+  "background_color": "#0b0d10",
+  "theme_color": "#d4a853",
+  "categories": ["business", "productivity"],
+  "lang": "pt-BR",
+  "dir": "ltr",
+  "icons": [
+    { "src": "icons/icon-72.png", "sizes": "72x72", "type": "image/png" },
+    { "src": "icons/icon-96.png", "sizes": "96x96", "type": "image/png" },
+    { "src": "icons/icon-128.png", "sizes": "128x128", "type": "image/png" },
+    { "src": "icons/icon-144.png", "sizes": "144x144", "type": "image/png" },
+    { "src": "icons/icon-152.png", "sizes": "152x152", "type": "image/png" },
+    { "src": "icons/icon-180.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-384.png", "sizes": "384x384", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/maskable-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "screenshots": [
+    {
+      "src": "logo.jpg",
+      "sizes": "384x480",
+      "type": "image/jpeg",
+      "form_factor": "narrow",
+      "label": "Dashboard Hermoso Bigote"
+    }
+  ]
+}

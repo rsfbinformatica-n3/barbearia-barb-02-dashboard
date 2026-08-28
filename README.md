@@ -1,6 +1,6 @@
 # Dashboard Hermoso Bigote
 
-Dashboard estático de demonstração/produção da Barbearia Hermoso Bigote.
+Dashboard estático público da Barbearia Hermoso Bigote para demonstrações e uso operacional.
 
 - Frontend: HTML/CSS/JS estático.
 - Backend: n8n em `https://barbearia.rsfbinformatica.com.br`.

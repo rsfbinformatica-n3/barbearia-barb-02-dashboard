@@ -4,6 +4,15 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dashboard Barbearia</title>
+  <meta name="description" content="Dashboard da Barbearia Hermoso Bigote para agenda, atendimento e relatórios." />
+  <meta name="theme-color" content="#d4a853" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Hermoso" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/icon-180.png" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -29,6 +38,10 @@
         <p class="erro-texto" id="login-erro" hidden></p>
         <button type="submit" class="botao-primario" id="login-botao">Entrar</button>
       </form>
+      <div class="pwa-instalar" id="pwa-instalar" hidden>
+        <button type="button" class="botao-secundario" id="pwa-instalar-botao">Instalar app no celular</button>
+        <span>Use como app em tela cheia no Android/iPhone.</span>
+      </div>
     </div>
   </div>
 
@@ -264,6 +277,38 @@
       mostrarApp();
     } else {
       mostrarLogin();
+    }
+
+    // PWA: registro do service worker + botão de instalação quando o navegador oferecer.
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./service-worker.js').catch((err) => {
+          console.warn('Service worker não registrado:', err);
+        });
+      });
+    }
+
+    let pwaInstallPrompt = null;
+    const pwaInstalar = document.getElementById('pwa-instalar');
+    const pwaInstalarBotao = document.getElementById('pwa-instalar-botao');
+
+    window.addEventListener('beforeinstallprompt', (ev) => {
+      ev.preventDefault();
+      pwaInstallPrompt = ev;
+      pwaInstalar.hidden = false;
+    });
+
+    if (pwaInstalarBotao) {
+      pwaInstalarBotao.addEventListener('click', async () => {
+        if (!pwaInstallPrompt) {
+          UI.toast('No iPhone: toque em Compartilhar e depois em “Adicionar à Tela de Início”.', 'info');
+          return;
+        }
+        pwaInstallPrompt.prompt();
+        await pwaInstallPrompt.userChoice;
+        pwaInstallPrompt = null;
+        pwaInstalar.hidden = true;
+      });
     }
   </script>
 </body>
