@@ -1,0 +1,32 @@
+/style.css
+  Content-Type: text/css; charset=utf-8
+
+/config.js
+  Content-Type: application/javascript; charset=utf-8
+
+/auth.js
+  Content-Type: application/javascript; charset=utf-8
+
+/api.js
+  Content-Type: application/javascript; charset=utf-8
+
+/ui.js
+  Content-Type: application/javascript; charset=utf-8
+
+/overview.js
+  Content-Type: application/javascript; charset=utf-8
+
+/kanban.js
+  Content-Type: application/javascript; charset=utf-8
+
+/agenda.js
+  Content-Type: application/javascript; charset=utf-8
+
+/atendimento.js
+  Content-Type: application/javascript; charset=utf-8
+
+/relatorios.js
+  Content-Type: application/javascript; charset=utf-8
+
+/vendor/chart.umd.min.js
+  Content-Type: application/javascript; charset=utf-8

@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard Barbearia</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ---------- Tela de login ---------- -->
+  <div class="login-tela" id="login-tela">
+    <div class="login-cartao">
+      <div class="login-marca">
+        <img class="login-marca-icone" src="logo.jpg" alt="" />
+        <strong id="login-marca-nome">Barbearia</strong>
+      </div>
+      <h1>Bem-vindo</h1>
+      <p class="login-subtitulo">Acesse o painel de gestão da barbearia.</p>
+      <form id="login-form">
+        <div class="campo">
+          <label for="login-usuario">Usuário</label>
+          <input type="text" id="login-usuario" autocomplete="username" required />
+        </div>
+        <div class="campo">
+          <label for="login-senha">Senha</label>
+          <input type="password" id="login-senha" autocomplete="current-password" required />
+        </div>
+        <p class="erro-texto" id="login-erro" hidden></p>
+        <button type="submit" class="botao-primario" id="login-botao">Entrar</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ---------- Tela principal (app) ---------- -->
+  <div class="app-tela" id="app-tela" hidden>
+    <div class="app-shell">
+      <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-topo">
+          <div class="marca">
+            <img class="marca-icone" src="logo.jpg" alt="" />
+            <div class="marca-texto">
+              <strong class="marca-nome" id="marca-nome">Barbearia</strong>
+              <span class="marca-sub">Powered by BARB-02</span>
+            </div>
+          </div>
+        </div>
+
+        <nav class="sidebar-nav" id="sidebar-nav">
+          <button type="button" class="nav-item nav-ativo" data-aba="visao-geral">
+            <span data-icone="dashboard"></span> Visão Geral
+          </button>
+          <button type="button" class="nav-item" data-aba="agendamentos">
+            <span data-icone="calendar"></span> Agendamentos
+          </button>
+          <button type="button" class="nav-item" data-aba="agenda">
+            <span data-icone="clock"></span> Agenda
+          </button>
+          <button type="button" class="nav-item" data-aba="atendimento">
+            <span data-icone="message"></span> Atendimento
+          </button>
+          <button type="button" class="nav-item" data-aba="relatorios">
+            <span data-icone="chart"></span> Relatórios
+          </button>
+        </nav>
+
+        <div class="sidebar-rodape">
+          <button type="button" class="botao-sair" id="botao-sair">
+            <span data-icone="logout"></span> Sair
+          </button>
+        </div>
+      </aside>
+
+      <div class="app-main">
+        <header class="app-header">
+          <button type="button" class="botao-menu-mobile" id="botao-menu-mobile" aria-label="Abrir menu">
+            <span data-icone="menu"></span>
+          </button>
+          <div class="header-titulo">
+            <h1 id="header-titulo">Visão Geral</h1>
+            <p id="header-subtitulo">Um resumo rápido da agenda e do atendimento de hoje.</p>
+          </div>
+          <span class="status-badge"><span class="status-dot"></span>Sistema online</span>
+        </header>
+
+        <main class="app-conteudo">
+          <section class="aba-conteudo" id="aba-visao-geral">
+            <div class="indicadores" id="indicadores"></div>
+          </section>
+
+          <section class="aba-conteudo" id="aba-agendamentos" hidden>
+            <div class="kanban-board" id="kanban-board"></div>
+          </section>
+
+          <section class="aba-conteudo" id="aba-agenda" hidden>
+            <div class="agenda-container" id="agenda-container"></div>
+          </section>
+
+          <section class="aba-conteudo" id="aba-atendimento" hidden>
+            <div class="atendimento-layout" id="atendimento-layout">
+              <div class="atendimento-painel-lista">
+                <div class="atendimento-busca">
+                  <span data-icone="search"></span>
+                  <input type="text" id="atendimento-busca-input" placeholder="Buscar conversa..." />
+                </div>
+                <div class="atendimento-lista" id="atendimento-lista"></div>
+              </div>
+              <div class="chat-painel" id="chat-painel"></div>
+            </div>
+          </section>
+
+          <section class="aba-conteudo" id="aba-relatorios" hidden>
+            <div class="relatorios-container" id="relatorios-container"></div>
+          </section>
+        </main>
+      </div>
+    </div>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="auth.js"></script>
+  <script src="api.js"></script>
+  <script src="ui.js"></script>
+  <script src="overview.js"></script>
+  <script src="kanban.js"></script>
+  <script src="agenda.js"></script>
+  <script src="atendimento.js"></script>
+  <!-- Chart.js local: evita falha em celular/adblock/CSP/CDN e mantém a versão travada. -->
+  <script src="vendor/chart.umd.min.js"></script>
+  <script src="relatorios.js"></script>
+  <script>
+    // Bootstrap da página: liga login/logout, navegação da sidebar, menu mobile
+    // e preenche todos os ícones (elementos com [data-icone]).
+
+    function preencherIcones(raiz) {
+      (raiz || document).querySelectorAll('[data-icone]').forEach((el) => {
+        el.innerHTML = UI.icon(el.dataset.icone);
+      });
+    }
+
+    const loginTela = document.getElementById('login-tela');
+    const appTela = document.getElementById('app-tela');
+    const botaoSair = document.getElementById('botao-sair');
+    const navBotoes = Array.from(document.querySelectorAll('.nav-item'));
+    const sidebar = document.getElementById('sidebar');
+    const sidebarBackdrop = document.getElementById('sidebar-backdrop');
+    const botaoMenuMobile = document.getElementById('botao-menu-mobile');
+    const headerTitulo = document.getElementById('header-titulo');
+    const headerSubtitulo = document.getElementById('header-subtitulo');
+
+    const ABAS = {
+      'visao-geral': { titulo: 'Visão Geral', subtitulo: 'Um resumo rápido da agenda e do atendimento de hoje.' },
+      agendamentos: { titulo: 'Agendamentos', subtitulo: 'Gerencie a agenda e acompanhe os atendimentos da barbearia.' },
+      agenda: { titulo: 'Agenda', subtitulo: 'Veja a agenda do dia ou da semana sem abrir o Google Agenda.' },
+      atendimento: { titulo: 'Atendimento', subtitulo: 'Converse com os clientes e controle quando a IA ou a equipe está respondendo.' },
+      relatorios: { titulo: 'Relatórios', subtitulo: 'Faturamento e quantidade de atendimentos, mês a mês.' },
+    };
+
+    let abaAtiva = 'visao-geral';
+
+    // Nome da barbearia vem do config.js — único lugar a trocar pra outro cliente.
+    document.getElementById('marca-nome').textContent = CONFIG.NOME_BARBEARIA;
+    document.getElementById('login-marca-nome').textContent = CONFIG.NOME_BARBEARIA;
+
+    function mostrarApp() {
+      loginTela.hidden = true;
+      appTela.hidden = false;
+      preencherIcones();
+      Kanban.init(document.getElementById('kanban-board'));
+      Atendimento.init({
+        listaEl: document.getElementById('atendimento-lista'),
+        chatEl: document.getElementById('chat-painel'),
+        buscaEl: document.getElementById('atendimento-busca-input'),
+        layoutEl: document.getElementById('atendimento-layout'),
+      });
+      Overview.init(document.getElementById('indicadores'));
+      Agenda.init(document.getElementById('agenda-container'));
+      Relatorios.init(document.getElementById('relatorios-container'));
+      irParaAba(abaAtiva);
+    }
+
+    function mostrarLogin() {
+      Kanban.stop();
+      Agenda.stop();
+      Atendimento.stop();
+      Overview.stop();
+      Relatorios.stop();
+      appTela.hidden = true;
+      loginTela.hidden = false;
+    }
+
+    function irParaAba(nome) {
+      abaAtiva = nome;
+
+      navBotoes.forEach((b) => b.classList.toggle('nav-ativo', b.dataset.aba === nome));
+      document.getElementById('aba-visao-geral').hidden = nome !== 'visao-geral';
+      document.getElementById('aba-agendamentos').hidden = nome !== 'agendamentos';
+      document.getElementById('aba-agenda').hidden = nome !== 'agenda';
+      document.getElementById('aba-atendimento').hidden = nome !== 'atendimento';
+      document.getElementById('aba-relatorios').hidden = nome !== 'relatorios';
+
+      headerTitulo.textContent = ABAS[nome].titulo;
+      headerSubtitulo.textContent = ABAS[nome].subtitulo;
+
+      // Só a aba visível fica em polling — evita chamadas desnecessárias em segundo plano.
+      Kanban.stop();
+      Agenda.stop();
+      Atendimento.stop();
+      Overview.stop();
+      Relatorios.stop();
+      if (nome === 'visao-geral') Overview.start();
+      else if (nome === 'agendamentos') Kanban.start();
+      else if (nome === 'agenda') Agenda.start();
+      else if (nome === 'atendimento') Atendimento.start();
+      else if (nome === 'relatorios') Relatorios.start();
+
+      fecharMenuMobile();
+    }
+
+    function abrirMenuMobile() {
+      sidebar.classList.add('sidebar-aberta');
+      sidebarBackdrop.classList.add('sidebar-backdrop-visivel');
+    }
+
+    function fecharMenuMobile() {
+      sidebar.classList.remove('sidebar-aberta');
+      sidebarBackdrop.classList.remove('sidebar-backdrop-visivel');
+    }
+
+    navBotoes.forEach((botao) => {
+      botao.addEventListener('click', () => irParaAba(botao.dataset.aba));
+    });
+
+    botaoMenuMobile.addEventListener('click', abrirMenuMobile);
+    sidebarBackdrop.addEventListener('click', fecharMenuMobile);
+
+    botaoSair.addEventListener('click', () => {
+      Auth.logout();
+      mostrarLogin();
+    });
+
+    Api.onUnauthorized = () => {
+      mostrarLogin();
+    };
+
+    Auth.initLoginForm(
+      {
+        formEl: document.getElementById('login-form'),
+        usuarioEl: document.getElementById('login-usuario'),
+        senhaEl: document.getElementById('login-senha'),
+        erroEl: document.getElementById('login-erro'),
+        botaoEl: document.getElementById('login-botao'),
+      },
+      mostrarApp
+    );
+
+    // Ícones da tela de login (a tela do app só preenche ao entrar, em mostrarApp()).
+    preencherIcones(loginTela);
+
+    // Estado inicial: se já houver um header salvo em sessionStorage (mesma aba), pula o login.
+    if (Auth.isLoggedIn()) {
+      mostrarApp();
+    } else {
+      mostrarLogin();
+    }
+  </script>
+</body>
+</html>
