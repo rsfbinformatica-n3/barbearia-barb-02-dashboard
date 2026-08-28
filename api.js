@@ -30,9 +30,20 @@ const Api = {
       payload = JSON.stringify(body);
     }
 
+    // Dashboard operacional: nunca deixar navegador/PWA reutilizar resposta antiga
+    // dos webhooks. Isso é crítico no atendimento manual, onde a mensagem pode
+    // ter sido enviada e gravada no Postgres, mas a tela parecer desatualizada.
+    headers['Cache-Control'] = 'no-cache, no-store, must-revalidate';
+    headers.Pragma = 'no-cache';
+
+    if (method === 'GET') {
+      const sep = url.includes('?') ? '&' : '?';
+      url += sep + '_ts=' + Date.now();
+    }
+
     let resp;
     try {
-      resp = await fetch(url, { method, headers, body: payload });
+      resp = await fetch(url, { method, headers, body: payload, cache: 'no-store' });
     } catch (err) {
       throw new Error('Não consegui falar com o servidor. Verifique sua conexão.');
     }

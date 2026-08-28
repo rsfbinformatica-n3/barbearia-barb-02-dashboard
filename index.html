@@ -282,9 +282,19 @@
     // PWA: registro do service worker + botão de instalação quando o navegador oferecer.
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./service-worker.js').catch((err) => {
+        navigator.serviceWorker.register('./service-worker.js').then((registration) => {
+          // Garante que o app instalado receba correções rapidamente, sem ficar preso
+          // em uma versão antiga do atendimento/API por cache do PWA.
+          registration.update().catch(() => {});
+        }).catch((err) => {
           console.warn('Service worker não registrado:', err);
         });
+      });
+
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        if (sessionStorage.getItem('barb02_sw_reloaded') === '1') return;
+        sessionStorage.setItem('barb02_sw_reloaded', '1');
+        window.location.reload();
       });
     }
 
