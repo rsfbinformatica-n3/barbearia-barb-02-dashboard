@@ -26,12 +26,14 @@ const Relatorios = {
   // primeiros slots passam a checagem "all-pairs" (todo par, não só vizinhos — importante
   // num gráfico de pizza, onde qualquer fatia pode ficar ao lado de qualquer outra).
   // Além de 3 itens, o resto entra em "Outros" (cinza neutro) em vez de gerar uma 4ª cor.
-  PALETA: ['#3987e5', '#d95926', '#199e70'],
-  COR_OUTROS: '#6b7280',
+  // Tons mais vivos e contrastados (aprovados em QA visual Ricardo/RSFB).
+  PALETA: ['#4a9af5', '#f0773f', '#1fbb85'],
+  COR_OUTROS: '#7c8796',
 
   // Mesmas cores que o Kanban já usa pros dots de cada coluna — mantém o "status" com o
   // mesmo significado visual em toda a dashboard, em vez de uma paleta categórica genérica.
-  CORES_STATUS: { concluido: '#22c55e', cancelado: '#ef4444', agendado: '#d4a853' },
+  // Verde/vermelho mais vivos para contraste no fundo escuro.
+  CORES_STATUS: { concluido: '#2fce6a', cancelado: '#f0554c', agendado: '#e0b25c' },
   LABELS_STATUS: { concluido: 'Concluídos', cancelado: 'Cancelados', agendado: 'Agendados' },
 
   MESES_EXTENSO: [
@@ -372,15 +374,23 @@ const Relatorios = {
       type: 'doughnut',
       data: {
         labels: itens.map((i) => i.nome),
-        datasets: [{ data: valores, backgroundColor: cores, borderColor: '#181d23', borderWidth: 2 }],
+        datasets: [{ data: valores, backgroundColor: cores, borderColor: '#171c23', borderWidth: 3, hoverOffset: 6 }],
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
-        cutout: '62%',
+        cutout: '56%',
+        animation: { duration: 700, easing: 'easeOutQuart' },
         plugins: {
-          legend: { position: 'bottom', labels: { color: this._corTexto(), boxWidth: 10, font: { size: 11 }, padding: 12 } },
+          legend: { position: 'bottom', labels: { color: this._corTexto(), boxWidth: 11, boxHeight: 11, usePointStyle: true, pointStyle: 'circle', font: { size: 11, weight: 600 }, padding: 14 } },
           tooltip: {
+            backgroundColor: '#1f2630',
+            borderColor: 'rgba(212,168,83,0.35)',
+            borderWidth: 1,
+            padding: 10,
+            cornerRadius: 8,
+            titleColor: '#f7f7f8',
+            bodyColor: '#a1a9b5',
             callbacks: {
               label: (ctx) => {
                 const item = itens[ctx.dataIndex];
@@ -415,17 +425,28 @@ const Relatorios = {
         datasets: [{
           data: itens.map((i) => Number(i.quantidade) || 0),
           backgroundColor: itens.map((i) => this.CORES_STATUS[i.status] || this.COR_OUTROS),
-          borderColor: '#181d23',
-          borderWidth: 2,
+          borderColor: '#171c23',
+          borderWidth: 3,
+          hoverOffset: 6,
         }],
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
-        cutout: '62%',
+        cutout: '56%',
+        animation: { duration: 700, easing: 'easeOutQuart' },
         plugins: {
-          legend: { position: 'bottom', labels: { color: this._corTexto(), boxWidth: 10, font: { size: 11 }, padding: 12 } },
-          tooltip: { callbacks: { label: (ctx) => ` ${ctx.label}: ${ctx.parsed}` } },
+          legend: { position: 'bottom', labels: { color: this._corTexto(), boxWidth: 11, boxHeight: 11, usePointStyle: true, pointStyle: 'circle', font: { size: 11, weight: 600 }, padding: 14 } },
+          tooltip: {
+            backgroundColor: '#1f2630',
+            borderColor: 'rgba(212,168,83,0.35)',
+            borderWidth: 1,
+            padding: 10,
+            cornerRadius: 8,
+            titleColor: '#f7f7f8',
+            bodyColor: '#a1a9b5',
+            callbacks: { label: (ctx) => ` ${ctx.label}: ${ctx.parsed}` },
+          },
         },
       },
     });
@@ -446,17 +467,29 @@ const Relatorios = {
         datasets: [{
           label: metrica === 'faturamento' ? 'Faturamento' : 'Quantidade',
           data: valores,
-          backgroundColor: cor,
-          borderRadius: 4,
-          maxBarThickness: 42,
+          backgroundColor: metrica === 'faturamento'
+            ? 'rgba(212,168,83,0.75)'
+            : 'rgba(57,135,229,0.7)',
+          borderRadius: 7,
+          borderSkipped: false,
+          maxBarThickness: 46,
+          hoverBackgroundColor: metrica === 'faturamento' ? 'rgba(240,200,117,0.95)' : 'rgba(79,158,244,0.9)',
         }],
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
+        animation: { duration: 700, easing: 'easeOutQuart' },
         plugins: {
           legend: { display: false },
           tooltip: {
+            backgroundColor: '#1f2630',
+            borderColor: 'rgba(212,168,83,0.35)',
+            borderWidth: 1,
+            padding: 10,
+            cornerRadius: 8,
+            titleColor: '#f7f7f8',
+            bodyColor: '#a1a9b5',
             callbacks: {
               label: (ctx) => metrica === 'faturamento' ? ` ${this._formatarReal(ctx.parsed.y)}` : ` ${ctx.parsed.y} atendimento(s)`,
             },
