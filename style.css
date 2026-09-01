@@ -324,6 +324,52 @@ button {
   text-align: center;
 }
 
+/* ---------- Crédito RSFBINFORMATICA ---------- */
+
+.credito-rsfb {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  color: var(--text-terciario);
+  font-size: 0.76rem;
+  line-height: 1.35;
+  text-decoration: none;
+  opacity: 0.78;
+  transition: opacity var(--transicao), color var(--transicao);
+}
+
+.credito-rsfb:hover,
+.credito-rsfb:focus-visible {
+  color: var(--text-secondary);
+  opacity: 1;
+}
+
+.credito-rsfb img {
+  display: block;
+  width: 76px;
+  height: auto;
+  flex: 0 0 auto;
+}
+
+.credito-rsfb strong {
+  color: var(--gold-light);
+  font-weight: 700;
+}
+
+.credito-rsfb-login {
+  width: 100%;
+  margin-top: 26px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+  justify-content: center;
+}
+
+.credito-app {
+  margin: 0 32px 20px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+}
+
 /* ---------- Shell do app ---------- */
 
 .app-tela[hidden],
@@ -2085,6 +2131,11 @@ button {
 
   .app-conteudo {
     padding: 18px 18px 32px;
+  }
+
+  .credito-app {
+    margin: 0 18px 18px;
+    padding-top: 16px;
   }
 
   .indicadores {

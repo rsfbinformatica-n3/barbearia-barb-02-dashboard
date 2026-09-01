@@ -1,4 +1,4 @@
-const CACHE_NAME = 'hermoso-dashboard-v20260828-redesign-premium';
+const CACHE_NAME = 'hermoso-dashboard-v20260901-rsfb-signature';
 const STATIC_ASSETS = [
   './',
   './index.html',
@@ -14,6 +14,7 @@ const STATIC_ASSETS = [
   './relatorios.js',
   './vendor/chart.umd.min.js',
   './logo.jpg',
+  './rsfb-credito.png',
   './manifest.webmanifest',
   './icons/icon-192.png',
   './icons/icon-512.png',

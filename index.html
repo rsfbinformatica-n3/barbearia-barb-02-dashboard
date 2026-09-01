@@ -13,7 +13,7 @@
   <link rel="manifest" href="manifest.webmanifest?v=20260828-redesign-premium" />
   <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png?v=20260828-redesign-premium" />
   <link rel="apple-touch-icon" sizes="180x180" href="icons/icon-180.png?v=20260828-redesign-premium" />
-  <link rel="stylesheet" href="style.css?v=20260828-redesign-premium" />
+  <link rel="stylesheet" href="style.css?v=20260901-rsfb-signature" />
 </head>
 <body>
 
@@ -42,6 +42,10 @@
         <button type="button" class="botao-secundario" id="pwa-instalar-botao">Instalar app no celular</button>
         <span>Use como app em tela cheia no Android/iPhone.</span>
       </div>
+      <a class="credito-rsfb credito-rsfb-login" href="https://rsfbinformatica.com.br/" target="_blank" rel="noopener" aria-label="Site da RSFBINFORMATICA">
+        <img src="rsfb-credito.png" alt="Logo RSFBINFORMATICA" width="76" height="29" />
+        <span>Desenvolvido pela <strong>RSFBINFORMATICA</strong></span>
+      </a>
     </div>
   </div>
 
@@ -128,6 +132,12 @@
             <div class="relatorios-container" id="relatorios-container"></div>
           </section>
         </main>
+        <footer class="credito-app" aria-label="Crédito de desenvolvimento">
+          <a class="credito-rsfb" href="https://rsfbinformatica.com.br/" target="_blank" rel="noopener">
+            <img src="rsfb-credito.png" alt="Logo RSFBINFORMATICA" width="76" height="29" />
+            <span>Desenvolvido pela <strong>RSFBINFORMATICA</strong></span>
+          </a>
+        </footer>
       </div>
     </div>
   </div>
@@ -282,7 +292,7 @@
     // PWA: registro do service worker + botão de instalação quando o navegador oferecer.
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./service-worker.js?v=20260828-redesign-premium').then((registration) => {
+        navigator.serviceWorker.register('./service-worker.js?v=20260901-rsfb-signature').then((registration) => {
           // Garante que o app instalado receba correções rapidamente, sem ficar preso
           // em uma versão antiga do atendimento/API por cache do PWA.
           registration.update().catch(() => {});
